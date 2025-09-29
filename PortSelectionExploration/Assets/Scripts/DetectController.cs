@@ -10,7 +10,7 @@ public class DetectController : MonoBehaviour
     public GameObject player;
     public GameObject[] playerSlot;
     public List<GameObject> activePlayers;
-    public List<InputDevice> activeDevice;
+    //public List<PlayerInput> activeDevice;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,25 +23,23 @@ public class DetectController : MonoBehaviour
         //need to enable the ability for it to listen
         ++InputUser.listenForUnpairedDeviceActivity;
 
-
         //if its not paired, add it
-
         InputUser.onUnpairedDeviceUsed +=
         (control, eventPtr) =>
         {
             if (!(control is ButtonControl))
-                return;           
-            
+                return;
+
             if (activePlayers.Count < playerSlot.Length)
             {
                 activePlayers.Add(PlayerInput.Instantiate(player).gameObject);
-   
-                activePlayers[activePlayers.Count - 1].GetComponent<PortSelect>().currentPlayer = playerSlot[activePlayers.Count - 1];
-               // activePlayers[activePlayers.Count - 1].GetComponent<PortSelect>().inputDevice = current;
-                    
+                // Debug.Log(activePlayers[activePlayers.Count - 1].GetComponent<PlayerInput>().);
+                //activePlayers[activePlayers.Count - 1].GetComponent<PortSelect>().currentPlayer = playerSlot[activePlayers.Count - 1];
+                //activePlayers[activePlayers.Count - 1].GetComponent<PortSelect>().inputDevice = activePlayers[activePlayers.Count - 1].GetComponent<PlayerInput>().devices[activePlayers.Count - 1];
+
             }
-            
+
+
         };
-        
     }
 }

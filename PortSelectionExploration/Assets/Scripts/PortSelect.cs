@@ -1,89 +1,49 @@
-    using NUnit.Framework;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 
-public class PortSelect : MonoBehaviour 
+public class PortSelect : MonoBehaviour
 {
 
-    public GameObject currentPlayer;
-    public GameObject[] portList;
-    GameObject selectedPort;
+    //public GameObject currentPlayer;
+    public Vector2[] portLocations;
+    Vector2 selectedPort;
     public int curPortPos;
-    bool axisInUse;
-    //public InputDevice inputDevice;
+
+    InputAction m_navigate;
+
+    
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        selectedPort = portList[2];
+        selectedPort = portLocations[2];
         curPortPos = 2;
 
-        
+        m_navigate = InputSystem.actions.FindAction("Navigate");
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        float i = Input.GetAxisRaw("Horizontal");
-        if (i != 0)
+        if (m_navigate.WasPressedThisFrame() == true)
         {
+            float i = Input.GetAxis("Horizontal");
+
             
-            if (!axisInUse)
+            if (i < 0 && curPortPos > 0)
             {
-                if (i < 0 && curPortPos > 0)
-                {
-                    curPortPos -= 1;
-                }
-                if (i > 0 && curPortPos < portList.Length - 1)
-                {
-                    curPortPos += 1;
-                }
-                axisInUse = true;
+                curPortPos -= 1;
+            }
+            if (i > 0 && curPortPos < portLocations.Length - 1)
+            {
+                curPortPos += 1;
             }
             
         }
-        else if(i == 0)
-        {
-            if (axisInUse)
-            {
-                axisInUse = false;
-            }
-        }
-      
-        
-        
-
-            /*       if (Keyboard.current.aKey.wasPressedThisFrame && curPortPos > 0)
-                   {
-                       curPortPos -= 1;
-
-                   }
-                   if (Keyboard.current.dKey.wasPressedThisFrame && curPortPos < portList.Length - 1)
-                   {
-                       curPortPos += 1;
-
-                   }
-
-               if (Gamepad.current != null)
-               {
-
-                   return;
-
-                   if (Gamepad.current.leftStick.value.x < 0 && curPortPos > 0)
-                   {
-                       curPortPos -= 1;
-
-                   }
-                   if (Gamepad.current.leftStick.value.x > 0 && curPortPos < portList.Length - 1)
-                   {
-                       curPortPos += 1;
-
-                   }
-               }*/
-
-
-            selectedPort = portList.GetValue(curPortPos) as GameObject;
-        currentPlayer.transform.position = new Vector3(selectedPort.transform.position.x, currentPlayer.transform.position.y, currentPlayer.transform.position.z);
+       selectedPort = portLocations[curPortPos];
+       transform.position = new Vector3(selectedPort.x, transform.position.y, transform.position.z);
     }
 }
