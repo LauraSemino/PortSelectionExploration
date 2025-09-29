@@ -10,50 +10,80 @@ public class PortSelect : MonoBehaviour
     public GameObject[] portList;
     GameObject selectedPort;
     public int curPortPos;
-
-    public InputDevice inputDevice;
+    bool axisInUse;
+    //public InputDevice inputDevice;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         selectedPort = portList[2];
         curPortPos = 2;
 
-        Debug.Log(inputDevice.name);
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (inputDevice.description.deviceClass == "Keyboard" && Keyboard.current == inputDevice)
+
+        float i = Input.GetAxisRaw("Horizontal");
+        if (i != 0)
         {
             
-            if (Keyboard.current.aKey.wasPressedThisFrame && curPortPos > 0)
+            if (!axisInUse)
             {
-                curPortPos -= 1;
-
-            }
-            if (Keyboard.current.dKey.wasPressedThisFrame && curPortPos < portList.Length - 1)
-            {
-                curPortPos += 1;
-
-            }
-        }     
-        if (inputDevice.description.deviceClass == "Gamepad" && Gamepad.current == inputDevice) 
-            {
-                if (Gamepad.current.leftStick.value.x < 0 && curPortPos > 0)
+                if (i < 0 && curPortPos > 0)
                 {
                     curPortPos -= 1;
-
                 }
-                if (Gamepad.current.leftStick.value.x > 0 && curPortPos < portList.Length - 1)
+                if (i > 0 && curPortPos < portList.Length - 1)
                 {
                     curPortPos += 1;
-
                 }
-            }    
-           
+                axisInUse = true;
+            }
+            
+        }
+        else if(i == 0)
+        {
+            if (axisInUse)
+            {
+                axisInUse = false;
+            }
+        }
       
-        selectedPort = portList.GetValue(curPortPos) as GameObject;
+        
+        
+
+            /*       if (Keyboard.current.aKey.wasPressedThisFrame && curPortPos > 0)
+                   {
+                       curPortPos -= 1;
+
+                   }
+                   if (Keyboard.current.dKey.wasPressedThisFrame && curPortPos < portList.Length - 1)
+                   {
+                       curPortPos += 1;
+
+                   }
+
+               if (Gamepad.current != null)
+               {
+
+                   return;
+
+                   if (Gamepad.current.leftStick.value.x < 0 && curPortPos > 0)
+                   {
+                       curPortPos -= 1;
+
+                   }
+                   if (Gamepad.current.leftStick.value.x > 0 && curPortPos < portList.Length - 1)
+                   {
+                       curPortPos += 1;
+
+                   }
+               }*/
+
+
+            selectedPort = portList.GetValue(curPortPos) as GameObject;
         currentPlayer.transform.position = new Vector3(selectedPort.transform.position.x, currentPlayer.transform.position.y, currentPlayer.transform.position.z);
     }
 }

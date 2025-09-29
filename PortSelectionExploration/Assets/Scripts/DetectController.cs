@@ -30,15 +30,15 @@ public class DetectController : MonoBehaviour
         (control, eventPtr) =>
         {
             if (!(control is ButtonControl))
-                return;          
+                return;           
             
             if (activePlayers.Count < playerSlot.Length)
             {
-                activePlayers.Add(Instantiate(player));
+                activePlayers.Add(PlayerInput.Instantiate(player).gameObject);
+   
                 activePlayers[activePlayers.Count - 1].GetComponent<PortSelect>().currentPlayer = playerSlot[activePlayers.Count - 1];
-                activePlayers[activePlayers.Count - 1].GetComponent<PortSelect>().inputDevice = Keyboard.current;
-                
-                                
+               // activePlayers[activePlayers.Count - 1].GetComponent<PortSelect>().inputDevice = current;
+                    
             }
             
         };
